@@ -1,0 +1,60 @@
+body {
+    font-family: 'Josefin Sans', sans-serif;
+    color: #222;
+    background-color: #fff;
+}
+
+h1 {
+    font-size: 60px;
+}
+
+p {
+    font-size: 20px;
+}
+
+ul {
+    list-style-type:none;  
+}
+
+.query-btn, 
+.query-btn:visited, 
+.query-btn:focus {
+  background-color: #f25f25 !important;
+  border-color: #f25f25 !important;
+  outline: none !important;
+  border-style: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.query-btn:hover, 
+.query-btn:active {
+    background-color: #ff8f63 !important;
+    border-color: #ff8f63 !important;
+    outline: none !important;
+    border-style: none !important;
+}
+
+.history-btn, 
+.history-btn:focus, 
+.history-btn:visited {
+  background-color: #25b8f2 !important;
+  border-color: #25b8f2 !important;
+  outline: none !important;
+  border-style: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.history-btn:hover, 
+.history-btn:active {
+    background-color: #52ceff !important;
+    border-color: #52ceff !important;
+    outline: none !important;
+    border-style: none !important;
+}
+
+.magic-8-ball-img {
+    max-width: 800px;
+    width : 100%; 
+}
