@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import '../styles/Home.css';
+
+import magicEightBallImg from '../images/sigmund-L8mclmMuWjg-unsplash.jpg';
 
 const Home = () => {
 
@@ -12,6 +15,7 @@ const Home = () => {
     }
 
     const submitQuery = () => {
+        if (query === "") return;
         const url = 'https://8ball.delegator.com/magic/JSON/';
         axios.get(url + query).then(res => {
             const resultString = res.data.magic.answer;
@@ -22,9 +26,9 @@ const Home = () => {
 
     const updateHistory = (resultString) => {
         const historyTemp = history;
-        historyTemp.push(resultString); //Adds last result
+        historyTemp.unshift(resultString); 
         if (historyTemp.length > 10){
-            historyTemp.shift(); //Removes first result.
+            historyTemp.pop(); 
         }
         setHistory(historyTemp);
     }
@@ -34,24 +38,33 @@ const Home = () => {
     }
 
     return (
-        <div>
-            <h1>Magic 8-Ball</h1>
+        <div className="container">
+            {/* &#8209; used instead of "-" to prevent linebreak between "8-Ball"*/}
+            <h1>Magic 8&#8209;Ball</h1> 
 
-            <image src=""/>
+            <img className="magic-8-ball-img" src={magicEightBallImg}/>
             
             {/*Query Result*/}
-            <h2>{result}</h2>
+            <p>{result}</p>
 
-            <input placeholder="Ask a question" value={query} onChange={handleQueryChange}/>
+            <input className="form-control form-control-md" value={query} onChange={handleQueryChange}/>
 
-            <button type="submit" onClick={submitQuery}>Submit</button>
-            <button onClick={showHistory}>Show History</button>
+            <button type="button" className="query-btn btn btn-primary" onClick={submitQuery}>Submit</button>
+            <button 
+                button 
+                type="button" 
+                className="history-btn btn btn-secondary" 
+                data-toggle="modal" 
+                data-target="#history-modal"
+                onClick={showHistory}>
+                Show History
+            </button>
 
             {/*History Popup*/}
-            <div>
+            <div className="modal" tabIndex="-1" role="dialog" id="history-modal" aria-labelledby="historyModalLabel" aria-hidden="true">
                 <ul>
-                    {history.map((item)=>(
-                        <li>{item}</li>
+                    {history.map((item, index)=>(
+                        <li key={item + index}><p>{item}</p></li>
                     ))}
                 </ul>
             </div>
