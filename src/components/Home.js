@@ -13,6 +13,7 @@ const Home = () => {
     const [result, setResult] = useState(""); //Stores answer from query.
     const [history, setHistory] = useState([]); //Stores last 10 query results.
     const [show, setShow] = useState(false); //Used with result history modal
+    const [loading, setLoading] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -22,21 +23,40 @@ const Home = () => {
     }
 
     const submitQuery = () => {
-        if (query === "") return;
+        
         const url = 'https://8ball.delegator.com/magic/JSON/';
+
+        if (query === "" || !isValidQuestion()){
+            alert("Please enter a question.");
+            return;
+        }
+
+        setLoading(true);
+        
         axios.get(url + query).then(res => {
+            setLoading(false);
             const resultString = res.data.magic.answer;
             updateHistory(resultString);
             setResult(resultString);
+        }).catch(function (error) {
+            setLoading(false);
+            alert("Unable to get a response from the magic 8-ball.");
         });
     }
 
+    const isValidQuestion = () => {
+        return (query.slice(-1) === "?");
+    }
+
     const updateHistory = (resultString) => {
+
         const historyTemp = history;
+
         historyTemp.unshift(resultString); 
         if (historyTemp.length > 10){
             historyTemp.pop(); 
         }
+
         setHistory(historyTemp);
     }
 
@@ -48,6 +68,7 @@ const Home = () => {
             <img className="magic-8-ball-img" alt="Magic 8-Ball" src={magicEightBallImg}/>
             
             {/*Query Result*/}
+            { loading? <p>Loading...</p> : null /* This text here should be replaced with a spinner image */ } 
             <p className="result">{result}</p>
 
             <Form className="query-form" >
