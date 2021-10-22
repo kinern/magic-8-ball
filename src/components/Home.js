@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import {Form, Button, Modal} from 'react-bootstrap';
+
+
 import '../styles/Home.css';
 
 import magicEightBallImg from '../images/sigmund-L8mclmMuWjg-unsplash.jpg';
@@ -9,6 +12,10 @@ const Home = () => {
     const [query, setQuery] = useState(""); //Stores input query.
     const [result, setResult] = useState(""); //Stores answer from query.
     const [history, setHistory] = useState([]); //Stores last 10 query results.
+    const [show, setShow] = useState(false); //Used with result history modal
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const handleQueryChange = (event) => {
         setQuery(event.target.value);
@@ -33,41 +40,46 @@ const Home = () => {
         setHistory(historyTemp);
     }
 
-    const showHistory = () => {
-
-    }
-
     return (
         <div className="container">
             {/* &#8209; used instead of "-" to prevent linebreak between "8-Ball"*/}
             <h1>Magic 8&#8209;Ball</h1> 
 
-            <img className="magic-8-ball-img" src={magicEightBallImg}/>
+            <img className="magic-8-ball-img" alt="Magic 8-Ball" src={magicEightBallImg}/>
             
             {/*Query Result*/}
-            <p>{result}</p>
+            <p className="result">{result}</p>
 
-            <input className="form-control form-control-md" value={query} onChange={handleQueryChange}/>
+            <Form className="query-form" >
+                <Form.Control className="query-input my-auto" value={query} onChange={handleQueryChange} />
 
-            <button type="button" className="query-btn btn btn-primary" onClick={submitQuery}>Submit</button>
-            <button 
-                button 
-                type="button" 
-                className="history-btn btn btn-secondary" 
-                data-toggle="modal" 
-                data-target="#history-modal"
-                onClick={showHistory}>
-                Show History
-            </button>
+                <div className="d-grid gap-2 action-buttons">
+                    <Button type="button" className="query-btn" variant="primary" onClick={submitQuery}>Submit</Button>
+                    <Button 
+                        button 
+                        type="button" 
+                        className="history-btn" 
+                        variant="secondary"
+                        onClick={handleShow}
+                        >
+                        Show History
+                    </Button>
+                </div>
+            </Form>
 
             {/*History Popup*/}
-            <div className="modal" tabIndex="-1" role="dialog" id="history-modal" aria-labelledby="historyModalLabel" aria-hidden="true">
-                <ul>
-                    {history.map((item, index)=>(
-                        <li key={item + index}><p>{item}</p></li>
-                    ))}
-                </ul>
-            </div>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header className="history-header" closeButton>
+                    <Modal.Title>Result History</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <ul>
+                        {history.map((item, index)=>(
+                            <li key={item + index}><p>{item}</p></li>
+                        ))}
+                    </ul>
+                </Modal.Body>
+            </Modal>
         </div>
     );
 }
